@@ -1,20 +1,21 @@
 "use client";
 import Link from "next/link";
 import useMasonry from "@/components/utils/use-masonry";
+import Image from "next/image";
 
 export default function Forum() {
   const masonryContainer = useMasonry();
   const posts = [
-    "200x300",
-    "200x200",
-    "200x240",
-    "200x280",
-    "200x160",
-    "200x300",
-    "200x200",
-    "200x240",
-    "200x280",
-    "200x160",
+    { width: 200, height: 300 },
+    { width: 200, height: 200 },
+    { width: 200, height: 240 },
+    { width: 200, height: 280 },
+    { width: 200, height: 160 },
+    { width: 200, height: 300 },
+    { width: 200, height: 200 },
+    { width: 200, height: 240 },
+    { width: 200, height: 280 },
+    { width: 200, height: 160 },
   ];
   return (
     <div className="container mx-auto flex flex-col-reverse md:flex-row gap-4 px-4">
@@ -30,7 +31,13 @@ export default function Forum() {
               className="w-full flex flex-col"
               key={id}
             >
-              <img src={`https://placehold.co/${image}/3d3340/gray`} alt="" />
+              <Image
+                src={`https://placehold.co/${image.width}x${image.height}/3d3340/gray`}
+                width={image.width}
+                height={image.height}
+                className="w-full"
+                alt=""
+              />
               <div className="flex flex-col py-1 border-t-4 border-cmono-50">
                 <p>Post title {id}</p>
                 <p className="text-cmono-50 truncate">

@@ -2,7 +2,6 @@
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import {
-  RiArrowLeftBoxLine,
   RiArrowLeftDoubleLine,
   RiCalendar2Line,
   RiHome2Line,
@@ -10,6 +9,7 @@ import {
   RiNewspaperLine,
   RiSettings4Line,
 } from "@remixicon/react";
+import Image from "next/image";
 export default function Navbar() {
   const pathname = usePathname();
   return (
@@ -46,7 +46,12 @@ export default function Navbar() {
               <p>Welcome back,</p>
               <p className="text-cblue">anon</p>
             </div>
-            <img src="https://placehold.co/36x36" />
+            <Image
+              width={36}
+              height={36}
+              alt="user avatar"
+              src="https://placehold.co/36x36"
+            />
           </div>
         </div>
       </div>

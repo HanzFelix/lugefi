@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { RiChatNewFill } from "@remixicon/react";
+import Image from "next/image";
 
 export default async function ForumPost({
   params,
@@ -34,9 +35,11 @@ export default async function ForumPost({
           <div className="flex flex-col gap-4 py-4">
             {[1, 2].map((i) => (
               <div className="flex gap-2 w-full items-start" key={i}>
-                <img
+                <Image
                   src="https://placehold.co/36x36"
                   className="pt-1.5"
+                  width={36}
+                  height={36}
                   alt=""
                 />
                 <div className="basis-full border-l-4 border-cmono-50 pl-2">
@@ -52,8 +55,10 @@ export default async function ForumPost({
               </div>
             ))}
           </div>
-          <div className="flex gap-2 pl-1 items-start">
-            <RiChatNewFill size={24} className="min-w-8 mt-1.5 text-cmono-50" />
+          <div className="flex gap-2 items-start">
+            <div className="w-9 pt-1.5">
+              <RiChatNewFill size={24} className="text-cmono-50 ml-auto" />
+            </div>
             <textarea
               placeholder="Add a comment..."
               className="border-l-4 pl-2 py-1 border-cpurple focus:border-cyellow focus:outline-0 text-cmono-75 basis-full focus:bg-cmono-25 placeholder:text-cmono-50"
@@ -65,10 +70,12 @@ export default async function ForumPost({
         </div>
       </div>
       <div className="min-w-full md:min-w-1/3 lg:min-w-1/4">
-        <img
+        <Image
           src="https://placehold.co/200x300/3d3340/gray"
           className="w-full"
           alt=""
+          width={200}
+          height={300}
         />
       </div>
     </div>
