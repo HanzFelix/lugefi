@@ -1,28 +1,31 @@
 import { Button } from "@/components/ui/button";
+import { db } from "@/db/database";
+import { post } from "@/db/schema/forum";
 import { RiChatNewFill } from "@remixicon/react";
+import { eq } from "drizzle-orm";
 import Image from "next/image";
+
+async function getPost(id: number) {
+  return await db.select().from(post).where(eq(post.id, id));
+}
 
 export default async function ForumPost({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ id: number }>;
 }) {
   const { id } = await params;
+  const p = await getPost(id);
   return (
     <div className="container mx-auto flex flex-col md:flex-row gap-4 px-4">
       <div className="basis-full flex-col flex gap-4">
         <div>
-          <h2>Lorem ipsum dolor sit amet consectetur, adipisicing elit.</h2>
+          <h2>{p[0].title}</h2>
           <p className="text-cmono-50 text-xs">
-            Post by username on January 16, 2022
+            Post by {p[0].posted_by} on January 16, 2022
           </p>
         </div>
-        <p>
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellendus
-          quis vitae aspernatur, nam deleniti distinctio incidunt fugiat velit
-          maiores animi nostrum necessitatibus quasi eveniet architecto
-          consequuntur atque commodi voluptas saepe. {id}
-        </p>
+        <p>{p[0].description}</p>
         <div className="flex gap-2 text-xs font-bold text-cmono-75">
           {["lorem", "ipsum"].map((tag, id) => (
             <span key={id}>#{tag}</span>

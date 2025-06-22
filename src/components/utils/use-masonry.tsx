@@ -1,6 +1,7 @@
+import { SelectPost } from "@/db/schema/forum";
 import { useEffect, useState, useRef } from "react";
 
-const useMasonry = () => {
+const useMasonry = (posts: SelectPost[]) => {
   const masonryContainer = useRef<HTMLDivElement | null>(null);
   const [items, setItems] = useState<ChildNode[]>([]);
 
@@ -9,7 +10,7 @@ const useMasonry = () => {
       const masonryItem = Array.from(masonryContainer.current.children);
       setItems(masonryItem);
     }
-  }, []);
+  }, [posts]);
 
   useEffect(() => {
     const handleMasonry = () => {

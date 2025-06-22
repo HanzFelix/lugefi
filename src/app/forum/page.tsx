@@ -2,20 +2,28 @@
 import Link from "next/link";
 import useMasonry from "@/components/utils/use-masonry";
 import Image from "next/image";
-import { db } from "@/db/database";
-import { post } from "@/db/schema/forum";
+import { useEffect, useState } from "react";
+import { SelectPost } from "@/db/schema/forum";
 
-async function getPosts() {
-  //
-  return await db
-    .select({ id: post.id, title: post.title, description: post.description })
-    .from(post)
-    .limit(10);
-}
+export default function Forum() {
+  const [posts, setPosts] = useState<SelectPost[]>([]);
+  const masonryContainer = useMasonry(posts);
 
-export default async function Forum() {
-  const masonryContainer = useMasonry();
-  const posts = await getPosts();
+  useEffect(() => {
+    async function fetchPosts() {
+      const response = await fetch("/api/posts");
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const result = await response.json();
+      setPosts(result.data);
+    }
+
+    fetchPosts().catch((e) => {
+      console.error("An error occurred while fetching the data: ", e);
+    });
+  }, []);
+
   const images = [
     { width: 200, height: 300 },
     { width: 200, height: 200 },
@@ -31,7 +39,7 @@ export default async function Forum() {
           ref={masonryContainer}
           className="grid items-start gap-2 sm:gap-4 grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
         >
-          {posts.map((p, id) => (
+          {posts?.map((p, id) => (
             <Link
               href={`/forum/${p.id}`}
               className="w-full flex flex-col"
