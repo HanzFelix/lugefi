@@ -1,5 +1,10 @@
 import "dotenv/config";
-import { drizzle } from "drizzle-orm/neon-serverless";
-import ws from "ws";
+import { drizzle } from "drizzle-orm/neon-http";
+import { neon, neonConfig } from "@neondatabase/serverless";
 
-export const db = drizzle({ connection: process.env.DATABASE_URL!, ws: ws });
+import ws from "ws";
+neonConfig.webSocketConstructor = ws;
+neonConfig.poolQueryViaFetch = true;
+
+const sql = neon(process.env.DATABASE_URL!);
+export const db = drizzle({ client: sql });
