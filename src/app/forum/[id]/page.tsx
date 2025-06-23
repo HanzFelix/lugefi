@@ -1,12 +1,22 @@
 import { Button } from "@/components/ui/button";
 import { db } from "@/db/database";
 import { post } from "@/db/schema/forum";
+import { profile } from "@/db/schema/profile";
 import { RiChatNewFill } from "@remixicon/react";
 import { eq } from "drizzle-orm";
 import Image from "next/image";
 
 async function getPost(id: number) {
-  return await db.select().from(post).where(eq(post.id, id));
+  return await db
+    .select({
+      id: post.id,
+      title: post.title,
+      description: post.description,
+      posted_by: profile.username,
+    })
+    .from(post)
+    .leftJoin(profile, eq(post.posted_by, profile.id))
+    .where(eq(post.id, id));
 }
 
 export default async function ForumPost({
@@ -20,19 +30,20 @@ export default async function ForumPost({
     <div className="container mx-auto flex flex-col md:flex-row gap-4 px-4">
       <div className="basis-full flex-col flex gap-4">
         <div>
-          <h2>{p[0].title}</h2>
+          <h2 className="text-cmono-100">{p[0].title}</h2>
           <p className="text-cmono-50 text-xs">
-            Post by {p[0].posted_by} on January 16, 2022
+            Post by <span className="hover:text-cyellow">{p[0].posted_by}</span>{" "}
+            on January 16, 2022
           </p>
         </div>
-        <p>{p[0].description}</p>
+        <p className="text-sm">{p[0].description}</p>
         <div className="flex gap-2 text-xs font-bold text-cmono-75">
           {["lorem", "ipsum"].map((tag, id) => (
             <span key={id}>#{tag}</span>
           ))}
         </div>
-        <div className="">
-          <p className="w-full border-y-2 px-2 border-cmono-50 text-cmono-75">
+        <div>
+          <p className="w-full border-y px-2 border-cmono-50 text-cmono-50">
             Comments
           </p>
           <div className="flex flex-col gap-4 py-4">
@@ -45,8 +56,8 @@ export default async function ForumPost({
                   height={36}
                   alt=""
                 />
-                <div className="basis-full border-l-4 border-cmono-50 pl-2">
-                  <p>
+                <div className="basis-full border-l-2 border-cmono-50 pl-2">
+                  <p className="text-sm">
                     Lorem ipsum dolor sit amet consectetur, adipisicing elit.
                     Repellendus quis vitae aspernatur, nam deleniti distinctio
                     incidunt fugiat velit maiores animi nostrum necessitatibus
@@ -64,7 +75,7 @@ export default async function ForumPost({
             </div>
             <textarea
               placeholder="Add a comment..."
-              className="border-l-4 pl-2 py-1 border-cpurple focus:border-cyellow focus:outline-0 text-cmono-75 basis-full focus:bg-cmono-25 placeholder:text-cmono-50"
+              className="border-l-2 pl-2 py-1 border-cpurple text-sm focus:border-cyellow focus:outline-0 text-cmono-75 basis-full focus:bg-cmono-25 placeholder:text-cmono-50"
             />
           </div>
           <div className="flex justify-end mt-2">

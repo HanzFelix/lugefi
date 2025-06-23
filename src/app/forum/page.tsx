@@ -56,7 +56,9 @@ export default function Forum() {
               />
               <div className="flex flex-col py-1 border-t-4 border-cmono-50">
                 <p>{p.title}</p>
-                <p className="text-cmono-50 truncate">{p.description}</p>
+                <p className="text-cmono-50 truncate text-sm">
+                  {p.description}
+                </p>
               </div>
             </Link>
           ))}

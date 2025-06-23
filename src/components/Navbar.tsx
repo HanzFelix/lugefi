@@ -13,13 +13,7 @@ import Image from "next/image";
 export default function Navbar() {
   const pathname = usePathname();
   return (
-    <div className="fixed bottom-0 w-full">
-      {/*
-    <div className="container mx-auto flex w-full justify-stretch md:px-4 *:even:bg-cmono-25 *:odd:bg-cmono-50 *:basis-full">
-      {[...Array(12)].map((x, i) => (
-        <div key={i}>.</div>
-      ))}
-    </div>*/}
+    <div className="fixed bottom-0 w-full text-sm">
       <div className="container mx-auto flex justify-end md:px-4">
         <div className="p-3 pb-2 flex flex-col items-stretch gap-4 bg-cmono-25 min-w-full md:min-w-1/3 lg:min-w-1/4">
           <div className="flex justify-between">
@@ -27,18 +21,18 @@ export default function Navbar() {
               <RiArrowLeftDoubleLine className="fill-cmono-50" />
             </div>
             <div className="flex basis-full justify-center gap-4">
-              <RiHome2Line />
+              <RiHome2Line className="text-cmono-50" />
               <Link href={"/forum"}>
                 {pathname == "/forum" ? (
-                  <RiNewspaperFill />
+                  <RiNewspaperFill className="text-cmono-100" />
                 ) : (
                   <RiNewspaperLine />
                 )}
               </Link>
-              <RiCalendar2Line />
+              <RiCalendar2Line className="text-cmono-50" />
             </div>
             <div>
-              <RiSettings4Line />
+              <RiSettings4Line className="text-cmono-50" />
             </div>
           </div>
           <div className="flex">

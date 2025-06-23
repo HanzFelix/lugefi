@@ -149,7 +149,7 @@
 
 body {
   background-color: var(--main-cmono-0);
-  color: var(--main-cmono-100);
+  color: var(--main-cmono-75);
   font-family: "Chivo";
   font-weight: 300;
 }
