@@ -5,6 +5,7 @@ import { profile } from "@/db/schema/profile";
 import { RiChatNewFill } from "@remixicon/react";
 import { eq } from "drizzle-orm";
 import Image from "next/image";
+import Link from "next/link";
 
 async function getPost(id: number) {
   return await db
@@ -12,7 +13,8 @@ async function getPost(id: number) {
       id: post.id,
       title: post.title,
       description: post.description,
-      posted_by: profile.username,
+      posted_by_id: profile.id,
+      posted_by_name: profile.username,
     })
     .from(post)
     .leftJoin(profile, eq(post.posted_by, profile.id))
@@ -32,7 +34,13 @@ export default async function ForumPost({
         <div>
           <h2 className="text-cmono-100">{p[0].title}</h2>
           <p className="text-cmono-50 text-xs">
-            Post by <span className="hover:text-cyellow">{p[0].posted_by}</span>{" "}
+            Post by{" "}
+            <Link
+              href={`/profile/${p[0].posted_by_id}`}
+              className="hover:text-cyellow"
+            >
+              {p[0].posted_by_name}
+            </Link>{" "}
             on January 16, 2022
           </p>
         </div>

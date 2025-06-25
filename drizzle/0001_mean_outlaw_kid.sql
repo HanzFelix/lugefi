@@ -1,0 +1,1 @@
+ALTER TABLE "post" RENAME COLUMN "created_t" TO "created_at";

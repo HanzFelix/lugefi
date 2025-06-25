@@ -3,7 +3,7 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import {
   RiArrowLeftDoubleLine,
-  RiCalendar2Line,
+  RiCalendarTodoLine,
   RiHome2Line,
   RiNewspaperFill,
   RiNewspaperLine,
@@ -29,7 +29,7 @@ export default function Navbar() {
                   <RiNewspaperLine />
                 )}
               </Link>
-              <RiCalendar2Line className="text-cmono-50" />
+              <RiCalendarTodoLine className="text-cmono-50" />
             </div>
             <div>
               <RiSettings4Line className="text-cmono-50" />
