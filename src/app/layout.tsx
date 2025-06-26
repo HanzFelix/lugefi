@@ -25,9 +25,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full relative">
+    <html lang="en" className="relative h-full">
       <body
-        className={`${aldrich.variable} ${chivo.variable} antialiased pt-16 pb-32 min-h-full relative h-auto overflow-y-scroll`}
+        className={`${aldrich.variable} ${chivo.variable} relative h-auto min-h-full overflow-y-scroll pt-16 pb-32 antialiased **:transition-colors **:duration-200`}
       >
         {children}
         <Navbar />

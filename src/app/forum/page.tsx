@@ -32,17 +32,16 @@ export default function Forum() {
     { width: 200, height: 160 },
   ];
   return (
-    <div className="container mx-auto flex flex-col-reverse md:flex-row gap-4 px-4">
-      <div className="basis-full">
-        <p>[Publish a post]</p>
+    <div className="container mx-auto flex flex-col-reverse gap-4 px-4 md:flex-row">
+      <div className="basis-auto">
         <div
           ref={masonryContainer}
-          className="grid items-start gap-2 sm:gap-4 grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+          className="grid grid-cols-2 items-start gap-2 sm:gap-4 lg:grid-cols-3 xl:grid-cols-4"
         >
           {posts?.map((p, id) => (
             <Link
               href={`/forum/${p.id}`}
-              className="w-full flex flex-col"
+              className="group flex w-full flex-col"
               key={id}
             >
               <Image
@@ -54,9 +53,11 @@ export default function Forum() {
                 className="w-full"
                 alt=""
               />
-              <div className="flex flex-col py-1 border-t-4 border-cmono-50">
-                <p>{p.title}</p>
-                <p className="text-cmono-50 truncate text-sm">
+              <div className="border-cmono-50 flex flex-col border-t-4 py-1">
+                <p className="group-hover:text-cmono-100 duration-200">
+                  {p.title}
+                </p>
+                <p className="group-hover:text-cmono-75 text-cmono-50 truncate text-sm duration-200">
                   {p.description}
                 </p>
               </div>

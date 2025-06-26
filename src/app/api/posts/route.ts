@@ -6,6 +6,6 @@ export async function GET() {
     data: await db
       .select({ id: post.id, title: post.title, description: post.description })
       .from(post)
-      .limit(10),
+      .limit(12),
   });
 }
