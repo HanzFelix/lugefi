@@ -1,3 +1,4 @@
+import Comments from "@/components/content/Comments";
 import { Button } from "@/components/ui/button";
 import { db } from "@/db/database";
 import { post } from "@/db/schema/forum";
@@ -6,6 +7,7 @@ import { RiChatNewFill } from "@remixicon/react";
 import { eq } from "drizzle-orm";
 import Image from "next/image";
 import Link from "next/link";
+import { Suspense } from "react";
 
 async function getPost(id: number) {
   return await db
@@ -54,41 +56,21 @@ export default async function ForumPost({
           <p className="border-cmono-50 text-cmono-50 w-full border-y px-2">
             Comments
           </p>
-          <div className="flex flex-col gap-4 py-4">
-            {[1, 2].map((i) => (
-              <div className="flex w-full items-start gap-2" key={i}>
-                <Image
-                  src="https://placehold.co/36x36"
-                  className="pt-1.5"
-                  width={36}
-                  height={36}
-                  alt=""
-                />
-                <div className="border-cmono-50 basis-full border-l-2 pl-2">
-                  <p className="text-sm">
-                    Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                    Repellendus quis vitae aspernatur, nam deleniti distinctio
-                    incidunt fugiat velit maiores animi nostrum necessitatibus
-                    quasi eveniet architecto consequuntur atque commodi voluptas
-                    saepe.
-                  </p>
-                  <p className="text-cmono-50 text-xs">Proxy244</p>
-                </div>
+          <Suspense fallback={<div>Loading comments</div>}>
+            <Comments postId={id} />
+            <div className="flex items-start gap-2">
+              <div className="w-9 pt-1">
+                <RiChatNewFill size={24} className="text-cmono-50 ml-auto" />
               </div>
-            ))}
-          </div>
-          <div className="flex items-start gap-2">
-            <div className="w-9 pt-1.5">
-              <RiChatNewFill size={24} className="text-cmono-50 ml-auto" />
+              <textarea
+                placeholder="Add a comment..."
+                className="border-cpurple focus:border-cyellow text-cmono-75 focus:bg-cmono-25 placeholder:text-cmono-50 basis-full border-l-2 py-1 pl-2 text-sm focus:outline-0"
+              />
             </div>
-            <textarea
-              placeholder="Add a comment..."
-              className="border-cpurple focus:border-cyellow text-cmono-75 focus:bg-cmono-25 placeholder:text-cmono-50 basis-full border-l-2 py-1 pl-2 text-sm focus:outline-0"
-            />
-          </div>
-          <div className="mt-2 flex justify-end">
-            <Button>Post</Button>
-          </div>
+            <div className="mt-2 flex justify-end">
+              <Button>Post</Button>
+            </div>
+          </Suspense>
         </div>
       </div>
       <div className="min-w-full md:min-w-1/3 lg:min-w-1/4">

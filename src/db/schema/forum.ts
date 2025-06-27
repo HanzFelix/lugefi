@@ -11,5 +11,13 @@ export const post = pgTable("post", {
   posted_by: integer().references(() => profile.id),
 });
 
+export const comment = pgTable("comment", {
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
+  text: varchar({ length: 511 }).notNull(),
+  posted_at: integer().references(() => post.id),
+  posted_by: integer().references(() => profile.id),
+  created_at: timestamp().defaultNow(),
+});
+
 export type SelectPost = typeof post.$inferSelect;
 export type InsertPost = typeof post.$inferInsert;
