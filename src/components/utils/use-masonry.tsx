@@ -1,7 +1,7 @@
-import { SelectPost } from "@/db/schema/forum";
+"use client";
 import { useEffect, useState, useRef } from "react";
 
-const useMasonry = (posts: SelectPost[]) => {
+const useMasonry = () => {
   const masonryContainer = useRef<HTMLDivElement | null>(null);
   const [items, setItems] = useState<ChildNode[]>([]);
 
@@ -10,7 +10,7 @@ const useMasonry = (posts: SelectPost[]) => {
       const masonryItem = Array.from(masonryContainer.current.children);
       setItems(masonryItem);
     }
-  }, [posts]);
+  }, []);
 
   useEffect(() => {
     const handleMasonry = () => {
@@ -20,7 +20,7 @@ const useMasonry = (posts: SelectPost[]) => {
         gapSize = parseInt(
           window
             .getComputedStyle(masonryContainer.current)
-            .getPropertyValue("grid-row-gap")
+            .getPropertyValue("grid-row-gap"),
         );
       }
       items.forEach((el) => {
