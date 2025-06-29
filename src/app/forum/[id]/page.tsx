@@ -16,6 +16,7 @@ async function getPost(id: number) {
       id: post.id,
       title: post.title,
       description: post.description,
+      image_url: post.image_url,
       posted_by_id: profile.id,
       posted_by_name: profile.username,
     })
@@ -80,9 +81,10 @@ export default async function ForumPost({
       </div>
       <div className="w-full md:w-1/3 lg:w-1/4">
         <Image
-          src="https://placehold.co/200x300/3d3340/gray"
-          className="w-full"
+          src={p[0].image_url}
+          className="w-full bg-red-500 object-cover"
           alt=""
+          priority
           width={200}
           height={300}
         />

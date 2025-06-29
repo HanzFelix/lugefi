@@ -6,17 +6,10 @@ import Image from "next/image";
 import useMasonry from "@/components/utils/use-masonry";
 import { SelectPost } from "@/db/schema/forum";
 
-const images = [
-  { width: 200, height: 300 },
-  { width: 200, height: 200 },
-  { width: 200, height: 240 },
-  { width: 200, height: 280 },
-  { width: 200, height: 160 },
-];
 export default function PostsClient({
   posts,
 }: {
-  posts: Pick<SelectPost, "id" | "title" | "description">[];
+  posts: Pick<SelectPost, "id" | "title" | "description" | "image_url">[];
 }) {
   const masonryContainer = useMasonry();
 
@@ -29,14 +22,14 @@ export default function PostsClient({
         <Link
           href={`/forum/${p.id}`}
           className="group flex w-full flex-col"
-          key={p.id}
+          key={id}
         >
           <Image
-            src={`https://placehold.co/${images[id % images.length].width}x${images[id % images.length].height}/3d3340/gray`}
-            width={images[id % images.length].width}
-            height={images[id % images.length].height}
-            className="w-full"
             alt=""
+            src={p.image_url}
+            width={300}
+            height={300}
+            className="w-full"
           />
           <div className="border-cmono-50 flex flex-col border-t-4 py-1">
             <p className="group-hover:text-cmono-100 duration-200">{p.title}</p>

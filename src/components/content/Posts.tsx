@@ -14,6 +14,7 @@ export default async function Posts({
       id: post.id,
       title: post.title,
       description: post.description,
+      image_url: post.image_url,
     })
     .from(post)
     .limit(12)
