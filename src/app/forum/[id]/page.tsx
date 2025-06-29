@@ -32,7 +32,7 @@ export default async function ForumPost({
   const p = await getPost(id);
   return (
     <div className="container mx-auto flex flex-col gap-4 px-4 md:flex-row">
-      <div className="flex basis-auto flex-col gap-4">
+      <div className="flex flex-1 flex-col gap-4">
         <div>
           <h2 className="text-cmono-100">{p[0].title}</h2>
           <p className="text-cmono-50 text-xs">
@@ -59,12 +59,15 @@ export default async function ForumPost({
           <Suspense fallback={<div>Loading comments</div>}>
             <Comments postId={id} />
             <div className="flex items-start gap-2">
-              <div className="w-9 pt-1">
-                <RiChatNewFill size={24} className="text-cmono-50 ml-auto" />
+              <div className="mt-1">
+                <RiChatNewFill
+                  size={24}
+                  className="text-cmono-50 ml-auto w-8"
+                />
               </div>
               <textarea
                 placeholder="Add a comment..."
-                className="border-cpurple focus:border-cyellow text-cmono-75 focus:bg-cmono-25 placeholder:text-cmono-50 basis-full border-l-2 py-1 pl-2 text-sm focus:outline-0"
+                className="border-cpurple focus:border-cyellow text-cmono-75 focus:bg-cmono-25 placeholder:text-cmono-50 flex-1 border-l-2 py-1 pl-2 text-sm focus:outline-0"
               />
             </div>
             <div className="mt-2 flex justify-end">
@@ -73,7 +76,7 @@ export default async function ForumPost({
           </Suspense>
         </div>
       </div>
-      <div className="min-w-full md:min-w-1/3 lg:min-w-1/4">
+      <div className="w-full md:w-1/3 lg:w-1/4">
         <Image
           src="https://placehold.co/200x300/3d3340/gray"
           className="w-full"

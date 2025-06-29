@@ -17,12 +17,15 @@ export default async function Comments({ postId }: { postId: number }) {
         <div className="flex w-full gap-2" key={id}>
           <Image
             src={`${c.profile ? c.profile.image_url : "https://placehold.co/36x36"}`}
-            className="w-8 self-start py-1"
+            className="mt-1 w-8 self-start"
             width={36}
             height={36}
             alt=""
           />
-          <div className="border-cmono-50 flex basis-full flex-col justify-end border-l-2 pl-2">
+          <div className="py-1">
+            <div className="bg-cmono-50 h-full min-h-8 w-0.5"></div>
+          </div>
+          <div className="flex min-h-8 flex-1 flex-col justify-center">
             <p className="text-sm">{c.comment.text}</p>
             <p className="text-cmono-50 text-xs">{`${c.profile?.username}`}</p>
           </div>
