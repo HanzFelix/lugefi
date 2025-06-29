@@ -2,6 +2,7 @@
 import { db } from "@/db/database";
 import { post } from "@/db/schema/forum";
 import PostsClient from "./PostClient";
+import { desc } from "drizzle-orm";
 
 export default async function Posts({
   searchParams,
@@ -15,8 +16,8 @@ export default async function Posts({
       description: post.description,
     })
     .from(post)
-    .limit(12);
-  console.log(searchParams);
+    .limit(12)
+    .orderBy(desc(post.id));
 
   return <PostsClient posts={posts} />;
 }

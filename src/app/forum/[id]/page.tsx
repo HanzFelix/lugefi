@@ -1,4 +1,5 @@
 import Comments from "@/components/content/Comments";
+import CommentsSkeleton from "@/components/content/CommentsSkeleton";
 import { Button } from "@/components/ui/button";
 import { db } from "@/db/database";
 import { post } from "@/db/schema/forum";
@@ -56,7 +57,8 @@ export default async function ForumPost({
           <p className="border-cmono-50 text-cmono-50 w-full border-y px-2">
             Comments
           </p>
-          <Suspense fallback={<div>Loading comments</div>}>
+
+          <Suspense fallback={<CommentsSkeleton />}>
             <Comments postId={id} />
             <div className="flex items-start gap-2">
               <div className="mt-1">

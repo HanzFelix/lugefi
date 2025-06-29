@@ -11,8 +11,7 @@ export default function ForumPage() {
   return (
     <div className="container mx-auto flex flex-col-reverse gap-4 px-4 md:flex-row">
       <div className="flex-1">
-        <Suspense fallback={<div>Loading posts...</div>}>
-          <PostsSkeleton />
+        <Suspense fallback={<PostsSkeleton />}>
           <Posts />
         </Suspense>
       </div>
