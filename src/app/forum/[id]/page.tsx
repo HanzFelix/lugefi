@@ -36,23 +36,33 @@ export default async function ForumPost({
     <div className="container mx-auto flex flex-col gap-4 px-4 md:flex-row">
       <div className="flex flex-1 flex-col gap-4">
         <div>
-          <h2 className="text-cmono-100">{p[0].title}</h2>
-          <p className="text-cmono-50 text-xs">
-            Post by{" "}
-            <Link
-              href={`/profile/${p[0].posted_by_id}`}
-              className="hover:text-cyellow"
-            >
-              {p[0].posted_by_name}
-            </Link>{" "}
-            on January 16, 2022
-          </p>
-        </div>
-        <p className="text-sm">{p[0].description}</p>
-        <div className="text-cmono-75 flex gap-2 text-xs font-bold">
-          {["lorem", "ipsum"].map((tag, id) => (
-            <span key={id}>#{tag}</span>
-          ))}
+          <Image
+            src={p[0].image_url}
+            className="float-right ml-2 block w-24 md:hidden"
+            alt=""
+            priority
+            width={96}
+            height={128}
+          />
+          <div>
+            <h2 className="text-cmono-100">{p[0].title}</h2>
+            <p className="text-cmono-50 text-xs">
+              Post by{" "}
+              <Link
+                href={`/profile/${p[0].posted_by_id}`}
+                className="hover:text-cyellow"
+              >
+                {p[0].posted_by_name}
+              </Link>{" "}
+              on January 16, 2022
+            </p>
+            <p className="my-4 text-sm">{p[0].description}</p>
+            <div className="text-cmono-75 flex gap-2 text-xs font-bold">
+              {["lorem", "ipsum"].map((tag, id) => (
+                <span key={id}>#{tag}</span>
+              ))}
+            </div>
+          </div>
         </div>
         <div>
           <p className="border-cmono-50 text-cmono-50 w-full border-y px-2">
@@ -82,7 +92,7 @@ export default async function ForumPost({
       <div className="w-full md:w-1/3 lg:w-1/4">
         <Image
           src={p[0].image_url}
-          className="w-full bg-red-500 object-cover"
+          className="bg-cmono-25 hidden aspect-2/3 w-full object-contain md:block"
           alt=""
           priority
           width={200}
