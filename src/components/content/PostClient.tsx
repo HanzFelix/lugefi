@@ -2,8 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-
-import useMasonry from "@/components/utils/use-masonry";
+import { Masonry } from "react-plock";
 import { SelectPost } from "@/db/schema/forum";
 
 export default function PostsClient({
@@ -11,14 +10,15 @@ export default function PostsClient({
 }: {
   posts: Pick<SelectPost, "id" | "title" | "description" | "image_url">[];
 }) {
-  const masonryContainer = useMasonry();
-
   return (
-    <div
-      ref={masonryContainer}
-      className="grid grid-cols-2 items-start gap-2 sm:gap-4 lg:grid-cols-3 xl:grid-cols-4"
-    >
-      {posts.map((p, id) => (
+    <Masonry
+      items={posts}
+      config={{
+        columns: [2, 2, 3, 4],
+        gap: [8, 16, 16, 16],
+        media: [768, 1024, 1280, 1536],
+      }}
+      render={(p, id) => (
         <Link
           href={`/forum/${p.id}`}
           className="group flex w-full flex-col"
@@ -38,7 +38,7 @@ export default function PostsClient({
             </p>
           </div>
         </Link>
-      ))}
-    </div>
+      )}
+    />
   );
 }

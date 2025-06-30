@@ -1,6 +1,6 @@
 "use client";
 import { Skeleton } from "../ui/skeleton";
-import useMasonry from "@/components/utils/use-masonry";
+import { Masonry } from "react-plock";
 
 const images = [
   { width: 200, height: 300 },
@@ -10,15 +10,17 @@ const images = [
   { width: 200, height: 120 },
   { width: 200, height: 180 },
 ];
+const arr = [...Array(12).keys()];
 export default function PostsSkeleton() {
-  const masonryContainer = useMasonry();
-
   return (
-    <div
-      ref={masonryContainer}
-      className="grid grid-cols-2 items-start gap-2 sm:gap-4 lg:grid-cols-3 xl:grid-cols-4"
-    >
-      {[...Array(12).keys()].map((i) => (
+    <Masonry
+      items={arr}
+      config={{
+        columns: [2, 2, 3, 4],
+        gap: [8, 16, 16, 16],
+        media: [768, 1024, 1280, 1536],
+      }}
+      render={(i) => (
         <div className="w-full" key={i}>
           <Skeleton
             style={{
@@ -26,14 +28,14 @@ export default function PostsSkeleton() {
                 images[i % images.length].width /
                 images[i % images.length].height,
             }}
-            className="w-full"
+            className="h-auto w-full"
           />
           <div className="flex flex-col gap-2 py-4">
             <Skeleton className="h-4" />
             <Skeleton className="h-4" />
           </div>
         </div>
-      ))}
-    </div>
+      )}
+    />
   );
 }

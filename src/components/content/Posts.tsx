@@ -9,6 +9,7 @@ export default async function Posts({
 }: {
   searchParams?: string;
 }) {
+  console.log(searchParams);
   const posts = await db
     .select({
       id: post.id,
