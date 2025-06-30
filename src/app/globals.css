@@ -86,13 +86,13 @@
   --sidebar-ring: oklch(0.705 0.015 286.067);
 
   --main-cmono-0: #e6e6e6;
-  --main-cmono-25: #dad9e1;
+  --main-cmono-25: #d0cfda;
   --main-cmono-50: #7c7c80;
   --main-cmono-75: #43454f;
   --main-cmono-100: #202123;
   --main-cpurple: #6659a6;
   --main-cyellow: #d6ba5c;
-  --main-cblue: #5c8bd6;
+  --main-cblue: #376794;
   --main-cred: #ef434b;
 }
 
@@ -135,6 +135,10 @@
     --main-cmono-50: #7c7c80;
     --main-cmono-25: #2e3038;
     --main-cmono-0: #202123;
+    --main-cpurple: #6659a6;
+    --main-cyellow: #d6ba5c;
+    --main-cblue: #5c8bd6;
+    --main-cred: #ef434b;
   }
 }
 
