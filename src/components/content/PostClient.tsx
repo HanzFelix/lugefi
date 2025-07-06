@@ -10,7 +10,7 @@ export default function PostsClient({
 }: {
   posts: Pick<SelectPost, "id" | "title" | "description" | "image_url">[];
 }) {
-  return (
+  return posts.length > 0 ? (
     <Masonry
       items={posts}
       config={{
@@ -40,5 +40,7 @@ export default function PostsClient({
         </Link>
       )}
     />
+  ) : (
+    <p className="text-cmono-50 text-sm">No posts found.</p>
   );
 }

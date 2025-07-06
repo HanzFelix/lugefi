@@ -1,10 +1,13 @@
 import { ChartLine } from "@/components/ChartLine";
 import { ChartRadar } from "@/components/ChartRadar";
+import Posts from "@/components/content/Posts";
+import PostsSkeleton from "@/components/content/PostsSkeleton";
 import { Button } from "@/components/ui/button";
 import { db } from "@/db/database";
 import { profile } from "@/db/schema/profile";
 import { eq } from "drizzle-orm";
 import Image from "next/image";
+import { Suspense } from "react";
 
 async function getProfile(id: number) {
   return await db
@@ -22,14 +25,14 @@ export default async function Profile({
   params: Promise<{ id: number }>;
 }) {
   const { id } = await params;
-  const p = await getProfile(id);
+  const [p] = await getProfile(id);
   return (
     <>
       <div className="container mx-auto flex flex-col gap-8 px-4 md:flex-row md:gap-4">
         <div className="flex flex-1 flex-col gap-4">
           <div className="flex">
             <div className="flex-1">
-              <h2 className="text-cmono-100">{p[0].username}</h2>
+              <h2 className="text-cmono-100">{p.username}</h2>
               <p className="mb-4 text-sm">
                 Status: <span className="text-cblue">Available</span>
               </p>
@@ -37,7 +40,7 @@ export default async function Profile({
             </div>
             <div className="basis-24">
               <Image
-                src={p[0].image_url}
+                src={p.image_url}
                 className="border-cmono-75 w-full border-2"
                 alt=""
                 width={96}
@@ -46,10 +49,7 @@ export default async function Profile({
             </div>
           </div>
           <div>
-            <p className="text-sm">
-              It takes a few steps to do this and that. Also in Tumblr via
-              @terminateduser
-            </p>
+            <p className="text-sm">This user has not updated their bio yet.</p>
           </div>
         </div>
         <div className="w-full md:w-1/3 lg:w-1/4">
@@ -67,14 +67,18 @@ export default async function Profile({
       </div>
       <div className="container mx-auto mt-8 flex flex-col-reverse gap-8 px-4 md:flex-row md:gap-4">
         <div className="flex flex-1 flex-col gap-4">
+          {/*
           <p className="border-cmono-50 text-cmono-50 w-full border-y px-2">
             Badge Showcase
           </p>
-          <p className="text-cmono-50 text-sm">No badges to display</p>
-          <p className="border-cmono-50 text-cmono-50 mt-8 w-full border-y px-2">
+          <p className="text-cmono-50 text-sm mb-8">No badges to display</p>
+          */}
+          <p className="border-cmono-50 text-cmono-50 w-full border-y px-2">
             Recent Posts
           </p>
-          <p className="text-cmono-50 text-sm">This user has not posted yet</p>
+          <Suspense fallback={<PostsSkeleton />}>
+            <Posts searchParams={{ posted_by: id }} />
+          </Suspense>
         </div>
         <div className="w-full md:w-1/3 lg:w-1/4">
           <p className="text-sm">Performance Evaluation</p>
