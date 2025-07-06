@@ -4,13 +4,16 @@ import Link from "next/link";
 import {
   RiArrowLeftDoubleLine,
   RiCalendarTodoLine,
+  RiHome2Fill,
   RiHome2Line,
+  RiLogoutBoxLine,
   RiNewspaperFill,
   RiNewspaperLine,
-  RiSettings4Line,
 } from "@remixicon/react";
+import { signOut, useSession, signIn } from "next-auth/react";
 import Image from "next/image";
 export default function Navbar() {
+  const { data: session } = useSession();
   const pathname = usePathname();
   return (
     <div className="fixed bottom-0 w-full text-sm">
@@ -21,7 +24,13 @@ export default function Navbar() {
               <RiArrowLeftDoubleLine className="fill-cmono-50" />
             </div>
             <div className="flex basis-full justify-center gap-4">
-              <RiHome2Line className="text-cmono-50" />
+              <Link href={"/"}>
+                {pathname == "/" ? (
+                  <RiHome2Fill className="text-cmono-100" />
+                ) : (
+                  <RiHome2Line />
+                )}
+              </Link>
               <Link href={"/forum"}>
                 {pathname == "/forum" ? (
                   <RiNewspaperFill className="text-cmono-100" />
@@ -31,23 +40,42 @@ export default function Navbar() {
               </Link>
               <RiCalendarTodoLine className="text-cmono-50" />
             </div>
+            <form>
+              <button
+                onClick={() => signOut({ redirectTo: "/" })}
+                className="cursor-pointer"
+              >
+                <RiLogoutBoxLine className={session ? "" : "text-cmono-25"} />
+              </button>
+            </form>
+          </div>
+          {session ? (
+            <div className="flex items-center">
+              <div className="flex-1">
+                <p>Welcome back,</p>
+                <p className="text-cblue">{session.user.profile.username}</p>
+              </div>
+              <Link href={`/profile/${session.user.profile.id}`}>
+                <Image
+                  width={36}
+                  height={36}
+                  alt="user avatar"
+                  className="aspect-square w-9 object-cover"
+                  src={session.user.profile.image_url}
+                />
+              </Link>
+            </div>
+          ) : (
             <div>
-              <RiSettings4Line className="text-cmono-50" />
+              <p>To participate,</p>
+              <button
+                onClick={() => signIn("google", { redirectTo: "/" })}
+                className="hover:text-cyellow"
+              >
+                Sign in with Google
+              </button>
             </div>
-          </div>
-          <div className="flex items-center">
-            <div className="flex-1">
-              <p>Welcome back,</p>
-              <p className="text-cblue">anon</p>
-            </div>
-            <Image
-              width={36}
-              height={36}
-              alt="user avatar"
-              className="aspect-square w-9 object-cover"
-              src="https://ik.imagekit.io/lugefi/post_img/sample_img_200x300.png?updatedAt=1751087123716"
-            />
-          </div>
+          )}
         </div>
       </div>
     </div>

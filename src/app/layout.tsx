@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Aldrich, Chivo } from "next/font/google";
 import "./globals.css";
+import { SessionProvider } from "next-auth/react";
 import Navbar from "@/components/Navbar";
 
 const aldrich = Aldrich({
@@ -25,13 +26,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="relative h-full">
-      <body
-        className={`${aldrich.variable} ${chivo.variable} relative h-auto min-h-full overflow-y-scroll pt-16 pb-32 antialiased **:transition-colors **:duration-200`}
-      >
-        {children}
-        <Navbar />
-      </body>
-    </html>
+    <SessionProvider>
+      <html lang="en" className="relative h-full">
+        <body
+          className={`${aldrich.variable} ${chivo.variable} relative h-auto min-h-full overflow-y-scroll pt-16 pb-32 antialiased **:transition-colors **:duration-200`}
+        >
+          {children}
+          <Navbar />
+        </body>
+      </html>
+    </SessionProvider>
   );
 }
