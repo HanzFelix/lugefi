@@ -22,6 +22,13 @@
       "when": 1751032610226,
       "tag": "0002_productive_ricochet",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1751799139857,
+      "tag": "0003_great_moira_mactaggert",
+      "breakpoints": true
     }
   ]
 }
