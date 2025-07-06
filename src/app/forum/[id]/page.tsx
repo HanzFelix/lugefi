@@ -31,13 +31,13 @@ export default async function ForumPost({
   params: Promise<{ id: number }>;
 }) {
   const { id } = await params;
-  const p = await getPost(id);
+  const [p] = await getPost(id);
   return (
     <div className="container mx-auto flex flex-col gap-4 px-4 md:flex-row">
       <div className="flex flex-1 flex-col gap-4">
         <div>
           <Image
-            src={p[0].image_url}
+            src={p.image_url}
             className="float-right ml-2 block w-24 md:hidden"
             alt=""
             priority
@@ -45,18 +45,18 @@ export default async function ForumPost({
             height={128}
           />
           <div>
-            <h2 className="text-cmono-100">{p[0].title}</h2>
+            <h2 className="text-cmono-100">{p.title}</h2>
             <p className="text-cmono-50 text-xs">
               Post by{" "}
               <Link
-                href={`/profile/${p[0].posted_by_id}`}
+                href={`/profile/${p.posted_by_id}`}
                 className="hover:text-cyellow"
               >
-                {p[0].posted_by_name}
+                {p.posted_by_name}
               </Link>{" "}
               on January 16, 2022
             </p>
-            <p className="my-4 text-sm">{p[0].description}</p>
+            <p className="my-4 text-sm">{p.description}</p>
             <div className="text-cmono-75 flex gap-2 text-xs font-bold">
               {["lorem", "ipsum"].map((tag, id) => (
                 <span key={id}>#{tag}</span>
@@ -91,7 +91,7 @@ export default async function ForumPost({
       </div>
       <div className="w-full md:w-1/3 lg:w-1/4">
         <Image
-          src={p[0].image_url}
+          src={p.image_url}
           className="bg-cmono-25 hidden aspect-2/3 w-full object-contain md:block"
           alt=""
           priority

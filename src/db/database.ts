@@ -3,7 +3,6 @@ import { neon, neonConfig } from "@neondatabase/serverless";
 let connectionString = process.env.DATABASE_URL!;
 
 // Configuring Neon for local development
-console.log(process.env.NODE_ENV);
 if (process.env.NODE_ENV === "development") {
   connectionString = "postgres://postgres:postgres@db.localtest.me:5432/main";
   neonConfig.fetchEndpoint = (host) => {
