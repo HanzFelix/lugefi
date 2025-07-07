@@ -12,7 +12,8 @@ import {
 } from "@remixicon/react";
 import { signOut, useSession, signIn } from "next-auth/react";
 import Image from "next/image";
-export default function Navbar() {
+import { SelectProfile } from "@/db/schema/profile";
+export default function Navbar({ profile }: { profile?: SelectProfile }) {
   const { data: session } = useSession();
   const pathname = usePathname();
   return (
@@ -49,20 +50,22 @@ export default function Navbar() {
               </button>
             </form>
           </div>
-          {session ? (
+          {profile ? (
             <div className="flex items-center">
               <div className="flex-1">
                 <p>Welcome back,</p>
-                <p className="text-cblue">{session.user.profile.username}</p>
+                <p className="text-cblue">{profile.username}</p>
               </div>
-              <Link href={`/profile/${session.user.profile.id}`}>
-                <Image
-                  width={36}
-                  height={36}
-                  alt="user avatar"
-                  className="aspect-square w-9 object-cover"
-                  src={session.user.profile.image_url}
-                />
+              <Link href={`/profile/${profile.id}`}>
+                {
+                  <Image
+                    width={36}
+                    height={36}
+                    alt="user avatar"
+                    className="aspect-square w-9 object-cover"
+                    src={profile.image_url}
+                  />
+                }
               </Link>
             </div>
           ) : (

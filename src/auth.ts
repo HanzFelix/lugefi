@@ -1,26 +1,26 @@
 /// auth.ts
-import NextAuth, { DefaultSession } from "next-auth";
+import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import { db } from "@/db/database";
-import { account, session, user } from "@/db/schema/session";
-import { profile, SelectProfile } from "./db/schema/profile";
+import { account, session, user as userTable } from "@/db/schema/session";
+import { profile } from "./db/schema/profile";
 import { eq, like } from "drizzle-orm";
 
-declare module "next-auth" {
+/*declare module "next-auth" {
   interface Session {
     user: {
       profile: SelectProfile;
     } & DefaultSession["user"];
   }
-}
+}*/
 
 // *DO NOT* create a `Pool` here, outside the request handler.
 
 export const { handlers, auth, signIn, signOut } = NextAuth(() => {
   return {
     adapter: DrizzleAdapter(db, {
-      usersTable: user,
+      usersTable: userTable,
       accountsTable: account,
       sessionsTable: session,
     }),
@@ -30,33 +30,28 @@ export const { handlers, auth, signIn, signOut } = NextAuth(() => {
         clientId: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       }),
+      /*GitHubProvider({
+        clientId: process.env.GITHUB_ID,
+        clientSecret: process.env.GITHUB_SECRET,
+      }),*/
     ],
     callbacks: {
-      async session({ session, user }) {
-        const [existingProfile] = await db
-          .select()
-          .from(profile)
-          .where(eq(profile.user_id, user.id));
-        return {
-          ...session,
-          user: { ...session.user, profile: existingProfile },
-        };
-      },
       async signIn({ user }) {
-        if (!user.id) return false;
-        const existingProfile = await db
-          .select()
-          .from(profile)
-          .where(eq(profile.user_id, user.id));
+        if (!user.email) return false;
+        const [existingUser] = await db
+          .select({ id: userTable.id, profile: profile })
+          .from(userTable)
+          .leftJoin(profile, eq(profile.user_id, userTable.id))
+          .where(eq(userTable.email, user.email));
 
-        if (existingProfile.length === 0) {
+        if (!existingUser.profile) {
           const uniqueUsername = await generateUniqueUsername(
             user.name || "anonymous",
           );
           await db.insert(profile).values({
             username: uniqueUsername,
             image_url: process.env.LUGEFI_DEFAULT_AVATAR_URL || "",
-            user_id: user.id,
+            user_id: existingUser.id,
           });
         }
         return true;
