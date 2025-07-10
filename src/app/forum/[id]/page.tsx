@@ -84,7 +84,7 @@ export default async function ForumPost({
               />
             </div>
             <div className="mt-2 flex justify-end">
-              <Button>Post</Button>
+              <Button disabled>Post</Button>
             </div>
           </Suspense>
         </div>

@@ -43,7 +43,7 @@ export default function TagInput({
   return (
     <div className="flex gap-2 text-xs">
       <RiPriceTag3Fill size={24} />
-      <div className="border-cpurple flex basis-full flex-wrap items-center gap-2 overflow-x-hidden border-l-2 pl-2">
+      <div className="border-cpurple disabled:border-cmono-50 flex basis-full flex-wrap items-center gap-2 overflow-x-hidden border-l-2 pl-2">
         {tags.map((tag, id) => (
           <div
             key={id}

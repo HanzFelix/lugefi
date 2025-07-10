@@ -32,7 +32,9 @@ export default function ForumPage() {
         </p>
         <TagInput placeholder="FilterByTags..." />
         <div className="flex w-full justify-end">
-          <Button size="sm">Apply Filter</Button>
+          <Button size="sm" disabled>
+            Apply Filter
+          </Button>
         </div>
       </div>
     </div>
