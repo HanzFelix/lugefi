@@ -29,6 +29,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth(() => {
       GoogleProvider({
         clientId: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        allowDangerousEmailAccountLinking: true,
       }),
       /*GitHubProvider({
         clientId: process.env.GITHUB_ID,
@@ -44,14 +45,20 @@ export const { handlers, auth, signIn, signOut } = NextAuth(() => {
           .leftJoin(profile, eq(profile.user_id, userTable.id))
           .where(eq(userTable.email, user.email));
 
-        if (!existingUser.profile) {
+        if (!existingUser) {
+          const [{ id: createdUserId }] = await db
+            .insert(userTable)
+            .values({ name: user.name, email: user.email, image: user.image })
+            .returning({ id: userTable.id });
+
           const uniqueUsername = await generateUniqueUsername(
             user.name || "anonymous",
           );
+
           await db.insert(profile).values({
             username: uniqueUsername,
             image_url: process.env.LUGEFI_DEFAULT_AVATAR_URL || "",
-            user_id: existingUser.id,
+            user_id: createdUserId,
           });
         }
         return true;
