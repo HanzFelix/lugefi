@@ -40,7 +40,7 @@ export default async function ForumPost({
   async function createComment(formData: FormData) {
     "use server";
 
-    if (!session?.user?.id) throw new Error("no user");
+    if (!session || session.user?.id == null) throw new Error("no user");
 
     const profileId = db.$with("existing_profile").as(
       db
@@ -105,25 +105,27 @@ export default async function ForumPost({
 
           <Suspense fallback={<CommentsSkeleton />}>
             <Comments postId={id} />
-            <form action={createComment}>
-              <div className="flex items-start gap-2">
-                <div className="mt-1">
-                  <RiChatNewFill
-                    size={24}
-                    className="text-cmono-50 ml-auto w-8"
+            {session && (
+              <form action={createComment}>
+                <div className="flex items-start gap-2">
+                  <div className="mt-1">
+                    <RiChatNewFill
+                      size={24}
+                      className="text-cmono-50 ml-auto w-8"
+                    />
+                  </div>
+                  <textarea
+                    placeholder="Add a comment..."
+                    name="comment"
+                    required
+                    className="border-cpurple focus:border-cyellow text-cmono-75 focus:bg-cmono-25 placeholder:text-cmono-50 flex-1 border-l-2 py-1 pl-2 text-sm focus:outline-0"
                   />
                 </div>
-                <textarea
-                  placeholder="Add a comment..."
-                  name="comment"
-                  required
-                  className="border-cpurple focus:border-cyellow text-cmono-75 focus:bg-cmono-25 placeholder:text-cmono-50 flex-1 border-l-2 py-1 pl-2 text-sm focus:outline-0"
-                />
-              </div>
-              <div className="mt-2 flex justify-end">
-                <Button type="submit">Post</Button>
-              </div>
-            </form>
+                <div className="mt-2 flex justify-end">
+                  <Button type="submit">Post</Button>
+                </div>
+              </form>
+            )}
           </Suspense>
         </div>
       </div>
