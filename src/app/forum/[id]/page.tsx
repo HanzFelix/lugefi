@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { db } from "@/db/database";
 import { comment, post } from "@/db/schema/forum";
 import { profile } from "@/db/schema/profile";
+import { user } from "@/db/schema/session";
 import { RiChatNewFill } from "@remixicon/react";
 import { eq, sql } from "drizzle-orm";
 import Image from "next/image";
@@ -12,18 +13,21 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
-async function getPost(id: number) {
+async function getPost(id: number, user_id: string = "") {
   return await db
     .select({
       id: post.id,
       title: post.title,
       description: post.description,
       image_url: post.image_url,
+      created_at: post.created_at,
       posted_by_id: profile.id,
       posted_by_name: profile.username,
+      is_author: sql<boolean>`(${user.id} = ${user_id})`,
     })
     .from(post)
     .leftJoin(profile, eq(post.posted_by, profile.id))
+    .leftJoin(user, eq(profile.user_id, user.id))
     .where(eq(post.id, id));
 }
 
@@ -35,7 +39,7 @@ export default async function ForumPost({
   const session = await auth();
 
   const { id } = await params;
-  const [p] = await getPost(id);
+  const [p] = await getPost(id, session?.user?.id);
 
   async function createComment(formData: FormData) {
     "use server";
@@ -81,14 +85,19 @@ export default async function ForumPost({
           <div>
             <h2 className="text-cmono-100">{p.title}</h2>
             <p className="text-cmono-50 text-xs">
-              Post by{" "}
+              Post by
               <Link
                 href={`/profile/${p.posted_by_id}`}
                 className="hover:text-cyellow"
               >
-                {p.posted_by_name}
-              </Link>{" "}
-              on January 16, 2022
+                {" " + p.posted_by_name + " "}
+              </Link>
+              {"on " +
+                new Date(p.created_at).toLocaleDateString(undefined, {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
             </p>
             <p className="my-4 text-sm">{p.description}</p>
             <div className="text-cmono-75 flex gap-2 text-xs font-bold">
@@ -104,7 +113,7 @@ export default async function ForumPost({
           </p>
 
           <Suspense fallback={<CommentsSkeleton />}>
-            <Comments postId={id} />
+            <Comments postId={id} currentUser={session?.user?.id} />
             {session && (
               <form action={createComment}>
                 <div className="flex items-start gap-2">

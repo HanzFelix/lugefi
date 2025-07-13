@@ -7,7 +7,7 @@ export const post = pgTable("post", {
   title: varchar({ length: 255 }).notNull(),
   description: varchar({ length: 1023 }).notNull(),
   image_url: varchar({ length: 255 }).notNull(),
-  created_at: timestamp().defaultNow(),
+  created_at: timestamp().defaultNow().notNull(),
   posted_by: integer().references(() => profile.id),
 });
 
