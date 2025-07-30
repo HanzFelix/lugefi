@@ -14,7 +14,7 @@ export const post = pgTable("post", {
 export const comment = pgTable("comment", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
   text: varchar({ length: 511 }).notNull(),
-  posted_at: integer().references(() => post.id),
+  posted_at: integer().references(() => post.id, { onDelete: "set null" }),
   posted_by: integer().references(() => profile.id),
   created_at: timestamp().defaultNow(),
 });

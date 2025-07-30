@@ -6,12 +6,17 @@ import { db } from "@/db/database";
 import { comment, post } from "@/db/schema/forum";
 import { profile } from "@/db/schema/profile";
 import { user } from "@/db/schema/session";
-import { RiChatNewFill } from "@remixicon/react";
+import { RiChatNewFill, RiMoreFill } from "@remixicon/react";
 import { eq, sql } from "drizzle-orm";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 async function getPost(id: number, user_id: string = "") {
   return await db
@@ -83,7 +88,37 @@ export default async function ForumPost({
             height={128}
           />
           <div>
-            <h2 className="text-cmono-100">{p.title}</h2>
+            <h2 className="text-cmono-100 flex flex-wrap items-center gap-2">
+              {p.title}
+              {p.is_author && (
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <button className="text-cmono-50 hover:text-cyellow data-[state=open]:bg-cmono-25 cursor-pointer">
+                      <RiMoreFill />
+                    </button>
+                  </PopoverTrigger>
+                  <PopoverContent align="end" className="p-0" sideOffset={0}>
+                    {p.is_author ? (
+                      <div className="*:hover:text-cyellow text-cmono-75 *:hover:border-cyellow flex w-full max-w-40 flex-col text-sm *:border-x-2 *:border-transparent *:px-2 *:py-1">
+                        <button
+                          onClick={async () => {
+                            "use server";
+                            await db.delete(post).where(eq(post.id, p.id));
+                            redirect(`/forum`);
+                          }}
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    ) : (
+                      <p className="text-cmono-50 px-2 py-1 text-sm">
+                        (No action)
+                      </p>
+                    )}
+                  </PopoverContent>
+                </Popover>
+              )}
+            </h2>
             <p className="text-cmono-50 text-xs">
               Post by
               <Link
