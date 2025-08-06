@@ -83,7 +83,6 @@ export default async function ForumPost({
             src={p.image_url}
             className="float-right ml-2 block w-24 md:hidden"
             alt=""
-            priority
             width={96}
             height={128}
           />
@@ -178,9 +177,8 @@ export default async function ForumPost({
           src={p.image_url}
           className="bg-cmono-25 hidden aspect-2/3 w-full object-contain md:block"
           alt=""
-          priority
-          width={200}
-          height={300}
+          width={96}
+          height={128}
         />
       </div>
     </div>

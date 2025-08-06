@@ -27,8 +27,8 @@ export default function PostsClient({
           <Image
             alt=""
             src={p.image_url}
-            width={300}
-            height={300}
+            width={96}
+            height={128}
             className="w-full"
           />
           <div className="border-cmono-50 flex flex-col border-t-4 py-1">
