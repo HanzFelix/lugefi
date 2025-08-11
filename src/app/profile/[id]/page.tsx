@@ -77,7 +77,7 @@ export default async function Profile({
             Recent Posts
           </p>
           <Suspense fallback={<PostsSkeleton />}>
-            <Posts searchParams={{ posted_by: id }} />
+            <Posts params={{ u: id }} />
           </Suspense>
         </div>
         <div className="w-full md:w-1/3 lg:w-1/4">

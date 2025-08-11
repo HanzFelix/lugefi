@@ -1,28 +1,35 @@
 // components/forum/Posts.tsx
 import { db } from "@/db/database";
-import { post, SelectPost } from "@/db/schema/forum";
+import { post } from "@/db/schema/forum";
 import PostsClient from "./PostClient";
-import { and, desc, eq, ilike } from "drizzle-orm";
+import { and, desc, eq, ilike, or } from "drizzle-orm";
 
 export default async function Posts({
-  searchParams,
+  params,
 }: {
-  searchParams?: Partial<SelectPost>;
+  params?: {
+    q?: string;
+    p?: number;
+    s?: number;
+    u?: number;
+  };
 }) {
   const filters = [];
 
-  if (searchParams?.title) {
-    filters.push(ilike(post.title, searchParams.title));
+  if (params?.q) {
+    filters.push(
+      or(
+        ilike(post.title, `%${params.q}%`),
+        ilike(post.description, `%${params.q}%`),
+      ),
+    );
   }
-  if (searchParams?.description) {
-    filters.push(ilike(post.description, searchParams.description));
+  if (params?.u) {
+    filters.push(eq(post.posted_by, params.u));
   }
-  if (searchParams?.created_at) {
-    filters.push(eq(post.created_at, searchParams.created_at));
-  }
-  if (searchParams?.posted_by) {
-    filters.push(eq(post.posted_by, searchParams.posted_by));
-  }
+
+  const page = params?.p || 1;
+  const pageSize = params?.s || 12;
 
   const posts = await db
     .select({
@@ -33,7 +40,8 @@ export default async function Posts({
     })
     .from(post)
     .where(filters.length ? and(...filters) : undefined)
-    .limit(12)
+    .limit(pageSize)
+    .offset((page - 1) * pageSize)
     .orderBy(desc(post.id));
 
   return <PostsClient posts={posts} />;
