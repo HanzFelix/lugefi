@@ -5,7 +5,6 @@ import PostForm from "./PostForm";
 export default async function NewForumPost() {
   const session = await auth();
   if (!session?.user?.id) redirect("/");
-  console.log(process.env.LUGEFI_DEFAULT_POST_IMAGE_URL);
 
   return (
     <div className="container mx-auto mt-8 flex flex-col gap-8 px-4 md:flex-row md:gap-4">
