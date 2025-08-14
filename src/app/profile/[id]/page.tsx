@@ -21,10 +21,15 @@ async function getProfile(id: number) {
 
 export default async function Profile({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: number }>;
+  searchParams?: Promise<{
+    [key: string]: string | string[] | undefined;
+  }>;
 }) {
   const { id } = await params;
+  const currentPage = Number((await searchParams)?.p) || 1;
   const [p] = await getProfile(id);
   return (
     <>
@@ -66,18 +71,15 @@ export default async function Profile({
         </div>
       </div>
       <div className="container mx-auto mt-8 flex flex-col-reverse gap-8 px-4 md:flex-row md:gap-4">
-        <div className="flex flex-1 flex-col gap-4">
+        <div className="flex flex-1 flex-col">
           {/*
           <p className="border-cmono-50 text-cmono-50 w-full border-y px-2">
             Badge Showcase
           </p>
           <p className="text-cmono-50 text-sm mb-8">No badges to display</p>
           */}
-          <p className="border-cmono-50 text-cmono-50 w-full border-y px-2">
-            Recent Posts
-          </p>
           <Suspense fallback={<PostsSkeleton />}>
-            <Posts params={{ u: id }} />
+            <Posts params={{ u: id, p: currentPage }} title="Recent Posts" />
           </Suspense>
         </div>
         <div className="w-full md:w-1/3 lg:w-1/4">

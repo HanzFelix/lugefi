@@ -2,10 +2,12 @@
 import { db } from "@/db/database";
 import { post } from "@/db/schema/forum";
 import PostsClient from "./PostClient";
-import { and, desc, eq, ilike, or } from "drizzle-orm";
+import { and, count, desc, eq, ilike, or } from "drizzle-orm";
+import Link from "next/link";
 
 export default async function Posts({
   params,
+  title = "Posts",
 }: {
   params?: {
     q?: string;
@@ -13,6 +15,7 @@ export default async function Posts({
     s?: number;
     u?: number;
   };
+  title?: string;
 }) {
   const filters = [];
 
@@ -44,5 +47,37 @@ export default async function Posts({
     .offset((page - 1) * pageSize)
     .orderBy(desc(post.id));
 
-  return <PostsClient posts={posts} />;
+  const [total_posts] = await db
+    .select({ count: count() })
+    .from(post)
+    .where(filters.length ? and(...filters) : undefined);
+
+  const totalPages = Math.ceil(total_posts.count / pageSize);
+  return (
+    <>
+      <div className="border-cmono-50 mb-4 flex w-full border-y px-2">
+        <span className="text-cmono-50 flex-1">{title}</span>
+        <div className="flex gap-4">
+          <Link
+            href={`?${params?.q ? `q=${params.q}&` : ""}p=${page > 1 ? page - 1 : 1}`}
+            className="aria-disabled:text-cmono-50 hover:text-cyellow aria-disabled:pointer-events-none"
+            aria-disabled={page == 1}
+          >
+            Prev
+          </Link>
+          <span className="text-cmono-50">
+            {page} of {totalPages}
+          </span>
+          <Link
+            href={`?${params?.q ? `q=${params.q}&` : ""}p=${page < totalPages ? page + 1 : page}`}
+            className="aria-disabled:text-cmono-50 hover:text-cyellow aria-disabled:pointer-events-none"
+            aria-disabled={page == totalPages}
+          >
+            Next
+          </Link>
+        </div>
+      </div>
+      <PostsClient posts={posts} />
+    </>
+  );
 }

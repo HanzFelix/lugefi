@@ -26,6 +26,9 @@ export default async function ForumPage({
         </Suspense>
       </div>
       <div className="flex w-full flex-col gap-4 md:w-1/3 lg:w-1/4">
+        <div className="border-cmono-50 text-cmono-50 w-full border-y px-2">
+          <span>Quick Links</span>
+        </div>
         {session && (
           <Link
             href={"/forum/new"}
