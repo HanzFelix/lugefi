@@ -10,11 +10,10 @@ import {
   RiNewspaperFill,
   RiNewspaperLine,
 } from "@remixicon/react";
-import { signOut, useSession, signIn } from "next-auth/react";
+import { signOut, signIn } from "next-auth/react";
 import Image from "next/image";
 import { SelectProfile } from "@/db/schema/profile";
 export default function Navbar({ profile }: { profile?: SelectProfile }) {
-  const { data: session } = useSession();
   const pathname = usePathname();
   return (
     <div className="fixed bottom-0 w-full text-sm">
@@ -44,9 +43,10 @@ export default function Navbar({ profile }: { profile?: SelectProfile }) {
             <form>
               <button
                 onClick={() => signOut({ redirectTo: "/" })}
-                className="cursor-pointer"
+                className="disabled:text-cmono-25 not-disabled:cursor-pointer"
+                disabled={profile == undefined}
               >
-                <RiLogoutBoxLine className={session ? "" : "text-cmono-25"} />
+                <RiLogoutBoxLine />
               </button>
             </form>
           </div>
