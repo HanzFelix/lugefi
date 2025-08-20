@@ -17,6 +17,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { Textarea } from "@/components/ui/textarea";
 
 async function getPost(id: number, user_id: string = "") {
   return await db
@@ -151,17 +152,18 @@ export default async function ForumPost({
             {session && (
               <form action={createComment}>
                 <div className="flex items-start gap-2">
-                  <div className="mt-1">
+                  <label htmlFor="comment" className="mt-1">
                     <RiChatNewFill
                       size={24}
                       className="text-cmono-50 ml-auto w-8"
                     />
-                  </div>
-                  <textarea
+                  </label>
+                  <Textarea
                     placeholder="Add a comment..."
+                    id="comment"
                     name="comment"
                     required
-                    className="border-cpurple focus:border-cyellow text-cmono-75 focus:bg-cmono-25 placeholder:text-cmono-50 flex-1 border-l-2 py-1 pl-2 text-sm focus:outline-0"
+                    className="text-sm"
                   />
                 </div>
                 <div className="mt-2 flex justify-end">

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import Posts from "@/components/content/Posts";
 import PostsSkeleton from "@/components/content/PostsSkeleton";
 import { auth } from "@/auth";
+import { Input } from "@/components/ui/input";
 
 export default async function ForumPage({
   searchParams,
@@ -49,18 +50,18 @@ export default async function ForumPage({
             Filter Posts
           </p>
           <div className="flex flex-row-reverse items-start gap-2">
-            <input
+            <Input
               id="query"
               name="q"
               defaultValue={query}
               placeholder="Enter search terms..."
-              className="border-cpurple peer focus:border-cyellow text-cmono-75 user-invalid:border-cred focus:bg-cmono-25 placeholder:text-cmono-50 flex-1 border-l-2 py-1 pl-2 text-xs focus:outline-0"
+              className="text-xs"
             />
             <label
               className="peer-user-invalid:text-cred text-cmono-50 text-xs"
               htmlFor="query"
             >
-              <RiText size={24} className="ml-auto" />
+              <RiText size={24} className="ml-auto w-6" />
             </label>
           </div>
           {/*<TagInput placeholder="FilterByTags..." />*/}

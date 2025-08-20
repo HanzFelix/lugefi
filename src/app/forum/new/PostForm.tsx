@@ -4,6 +4,8 @@ import { RiImageAddFill, RiQuoteText, RiText } from "@remixicon/react";
 import { Button } from "@/components/ui/button";
 import { createPost } from "./CreatePost";
 import { useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 export default function PostForm({
   cloudName,
 }: {
@@ -53,14 +55,13 @@ export default function PostForm({
       <form className="flex flex-1 flex-col gap-4" onSubmit={handleSubmit}>
         <h2>New post</h2>
         <div className="flex flex-row-reverse items-start gap-2">
-          <input
+          <Input
             id="title"
             name="title"
             value={title}
             required
             placeholder="Enter title..."
             onChange={(e) => setTitle(e.target.value)}
-            className="border-cpurple peer focus:border-cyellow text-cmono-75 user-invalid:border-cred focus:bg-cmono-25 placeholder:text-cmono-50 flex-1 border-l-2 py-1 pl-2 focus:outline-0"
           />
           <label
             className="peer-user-invalid:text-cred text-cmono-50 mt-1"
@@ -70,14 +71,14 @@ export default function PostForm({
           </label>
         </div>
         <div className="flex flex-row-reverse items-start gap-2">
-          <textarea
+          <Textarea
             id="description"
             name="description"
             value={description}
             required
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Enter body text..."
-            className="border-cpurple peer focus:border-cyellow user-invalid:border-cred text-cmono-75 focus:bg-cmono-25 placeholder:text-cmono-50 flex-1 border-l-2 py-1 pl-2 text-sm focus:outline-0"
+            className="text-sm"
           />
           <label
             htmlFor="description"
@@ -90,7 +91,7 @@ export default function PostForm({
           <div className="mt-1">
             <RiImageAddFill size={24} className="text-cmono-50 ml-auto w-8" />
           </div>
-          <input
+          <Input
             name="image"
             type="file"
             accept="image/*"
@@ -120,7 +121,7 @@ export default function PostForm({
               e.target.reportValidity();
             }}
             placeholder="Image attachment is unavailable for now"
-            className="border-cpurple focus:border-cyellow text-cmono-75 focus:bg-cmono-25 placeholder:text-cmono-50 disabled:border-cmono-50 user-invalid:border-cred flex-1 border-l-2 py-1.5 pl-2 text-sm focus:outline-0"
+            className="text-sm"
           />
         </div>
         <div className="mt-2 flex justify-end">
