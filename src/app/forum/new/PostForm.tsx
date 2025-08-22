@@ -2,10 +2,11 @@
 
 import { RiImageAddFill, RiQuoteText, RiText } from "@remixicon/react";
 import { Button } from "@/components/ui/button";
-import { createPost } from "./CreatePost";
+import { createPost } from "@/app/actions/forum";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { redirect } from "next/navigation";
 export default function PostForm({
   cloudName,
 }: {
@@ -47,7 +48,8 @@ export default function PostForm({
       return;
     }
 
-    await createPost({ title, description, image_url });
+    const retrievedPostId = await createPost({ title, description, image_url });
+    if (retrievedPostId) redirect(`/forum/${retrievedPostId}`);
     setLoading(false);
   }
   return (

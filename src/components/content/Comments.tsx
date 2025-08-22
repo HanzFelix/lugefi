@@ -1,12 +1,9 @@
-import { db } from "@/db/database";
-import { comment } from "@/db/schema/forum";
-import { profile } from "@/db/schema/profile";
-import { eq, sql } from "drizzle-orm";
 import Image from "next/image";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { RiMore2Fill } from "@remixicon/react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { deleteComment, getComments } from "@/app/actions/forum";
 
 export default async function Comments({
   postId,
@@ -15,17 +12,7 @@ export default async function Comments({
   postId: number;
   currentUser?: string;
 }) {
-  const comments = await db
-    .select({
-      comment: comment,
-      profile: profile,
-      ...(currentUser
-        ? { is_author: sql<boolean>`(${profile.user_id} = ${currentUser})` }
-        : {}),
-    })
-    .from(comment)
-    .leftJoin(profile, eq(comment.posted_by, profile.id))
-    .where(eq(comment.posted_at, postId));
+  const comments = await getComments(postId);
 
   return (
     <div className="mt-4 flex flex-col gap-4 not-empty:mb-4">
@@ -63,10 +50,10 @@ export default async function Comments({
                     <button
                       onClick={async () => {
                         "use server";
-                        await db
-                          .delete(comment)
-                          .where(eq(comment.id, c.comment.id));
-                        redirect(`/forum/${postId}`);
+
+                        const isSuccess = await deleteComment(c.comment.id);
+
+                        if (isSuccess) redirect(`/forum/${postId}`);
                       }}
                     >
                       Delete

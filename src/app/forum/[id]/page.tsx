@@ -2,12 +2,7 @@ import { auth } from "@/auth";
 import Comments from "@/components/content/Comments";
 import CommentsSkeleton from "@/components/content/CommentsSkeleton";
 import { Button } from "@/components/ui/button";
-import { db } from "@/db/database";
-import { comment, post } from "@/db/schema/forum";
-import { profile } from "@/db/schema/profile";
-import { user } from "@/db/schema/session";
 import { RiChatNewFill, RiMoreFill } from "@remixicon/react";
-import { eq, sql } from "drizzle-orm";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -18,24 +13,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Textarea } from "@/components/ui/textarea";
-
-async function getPost(id: number, user_id: string = "") {
-  return await db
-    .select({
-      id: post.id,
-      title: post.title,
-      description: post.description,
-      image_url: post.image_url,
-      created_at: post.created_at,
-      posted_by_id: profile.id,
-      posted_by_name: profile.username,
-      is_author: sql<boolean>`(${user.id} = ${user_id})`,
-    })
-    .from(post)
-    .leftJoin(profile, eq(post.posted_by, profile.id))
-    .leftJoin(user, eq(profile.user_id, user.id))
-    .where(eq(post.id, id));
-}
+import { createComment, deletePost, getPost } from "@/app/actions/forum";
 
 export default async function ForumPost({
   params,
@@ -45,37 +23,10 @@ export default async function ForumPost({
   const session = await auth();
 
   const { id } = await params;
-  const [p] = await getPost(id, session?.user?.id);
+  const [p] = await getPost(id);
 
-  async function createComment(formData: FormData) {
-    "use server";
+  if (!p) throw new Error("Forum post not found");
 
-    if (!session || session.user?.id == null) throw new Error("no user");
-
-    const profileId = db.$with("existing_profile").as(
-      db
-        .select({
-          id: profile.id,
-        })
-        .from(profile)
-        .where(eq(profile.user_id, session.user.id))
-        .limit(1),
-    );
-
-    const [{ insertedId: commentId }] = await db
-      .with(profileId)
-      .insert(comment)
-      .values({
-        text: formData.get("comment") as string,
-        posted_at: id,
-        posted_by: sql`(select id from existing_profile)`,
-      })
-      .returning({ insertedId: post.id });
-
-    if (!commentId) throw new Error("Failed to add comment");
-
-    redirect(`/forum/${id}`);
-  }
   return (
     <div className="container mx-auto flex flex-col gap-4 px-4 md:flex-row">
       <div className="flex flex-1 flex-col gap-4">
@@ -103,8 +54,10 @@ export default async function ForumPost({
                         <button
                           onClick={async () => {
                             "use server";
-                            await db.delete(post).where(eq(post.id, p.id));
-                            redirect(`/forum`);
+
+                            const isSuccess = await deletePost(p.id);
+
+                            if (isSuccess) redirect(`/forum`);
                           }}
                         >
                           Delete
@@ -150,7 +103,18 @@ export default async function ForumPost({
           <Suspense fallback={<CommentsSkeleton />}>
             <Comments postId={id} currentUser={session?.user?.id} />
             {session && (
-              <form action={createComment}>
+              <form
+                action={async (formData: FormData) => {
+                  "use server";
+
+                  const isSuccess = await createComment({
+                    text: formData.get("comment") as string,
+                    post_id: id,
+                  });
+
+                  if (isSuccess) redirect(`/forum/${id}`);
+                }}
+              >
                 <div className="flex items-start gap-2">
                   <label htmlFor="comment" className="mt-1">
                     <RiChatNewFill

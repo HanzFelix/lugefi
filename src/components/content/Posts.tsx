@@ -1,9 +1,6 @@
-// components/forum/Posts.tsx
-import { db } from "@/db/database";
-import { post } from "@/db/schema/forum";
 import PostsClient from "./PostClient";
-import { and, count, desc, eq, ilike, or } from "drizzle-orm";
 import Link from "next/link";
+import { getPosts, getPostsCount } from "@/app/actions/forum";
 
 export default async function Posts({
   params,
@@ -17,42 +14,22 @@ export default async function Posts({
   };
   title?: string;
 }) {
-  const filters = [];
-
-  if (params?.q) {
-    filters.push(
-      or(
-        ilike(post.title, `%${params.q}%`),
-        ilike(post.description, `%${params.q}%`),
-      ),
-    );
-  }
-  if (params?.u) {
-    filters.push(eq(post.posted_by, params.u));
-  }
-
   const page = params?.p || 1;
-  const pageSize = params?.s || 12;
+  const page_size = params?.s || 12;
 
-  const posts = await db
-    .select({
-      id: post.id,
-      title: post.title,
-      description: post.description,
-      image_url: post.image_url,
-    })
-    .from(post)
-    .where(filters.length ? and(...filters) : undefined)
-    .limit(pageSize)
-    .offset((page - 1) * pageSize)
-    .orderBy(desc(post.id));
+  const posts = await getPosts({
+    query: params?.q,
+    page,
+    page_size,
+    user_id: params?.u,
+  });
 
-  const [total_posts] = await db
-    .select({ count: count() })
-    .from(post)
-    .where(filters.length ? and(...filters) : undefined);
+  const totalPosts = await getPostsCount({
+    query: params?.q,
+    user_id: params?.u,
+  });
 
-  const totalPages = Math.ceil(total_posts.count / pageSize);
+  const totalPages = Math.ceil(totalPosts / page_size);
   return (
     <>
       <div className="border-cmono-50 mb-4 flex w-full border-y px-2">

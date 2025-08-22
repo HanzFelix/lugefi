@@ -3,21 +3,9 @@ import { ChartRadar } from "@/components/ChartRadar";
 import Posts from "@/components/content/Posts";
 import PostsSkeleton from "@/components/content/PostsSkeleton";
 import { Button } from "@/components/ui/button";
-import { db } from "@/db/database";
-import { profile } from "@/db/schema/profile";
-import { eq } from "drizzle-orm";
 import Image from "next/image";
 import { Suspense } from "react";
-
-async function getProfile(id: number) {
-  return await db
-    .select({
-      username: profile.username,
-      image_url: profile.image_url,
-    })
-    .from(profile)
-    .where(eq(profile.id, id));
-}
+import { getProfile } from "@/app/actions/profile";
 
 export default async function Profile({
   params,
@@ -31,6 +19,7 @@ export default async function Profile({
   const { id } = await params;
   const currentPage = Number((await searchParams)?.p) || 1;
   const [p] = await getProfile(id);
+  if (!p) throw new Error("Profile not found");
   return (
     <>
       <div className="container mx-auto flex flex-col gap-8 px-4 md:flex-row md:gap-4">
