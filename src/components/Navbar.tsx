@@ -16,7 +16,7 @@ import { SelectProfile } from "@/db/schema/profile";
 export default function Navbar({ profile }: { profile?: SelectProfile }) {
   const pathname = usePathname();
   return (
-    <div className="fixed bottom-0 w-full text-sm">
+    <nav className="fixed bottom-0 w-full text-sm">
       <div className="mx-auto flex justify-end md:container md:px-4">
         <div className="bg-cmono-25 flex w-full flex-col items-stretch gap-4 p-3 pb-2 md:w-1/3 lg:w-1/4">
           <div className="flex justify-between">
@@ -81,6 +81,6 @@ export default function Navbar({ profile }: { profile?: SelectProfile }) {
           )}
         </div>
       </div>
-    </div>
+    </nav>
   );
 }
