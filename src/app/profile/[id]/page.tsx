@@ -67,7 +67,7 @@ export default async function Profile({
           </p>
           <p className="text-cmono-50 text-sm mb-8">No badges to display</p>
           */}
-          <Suspense fallback={<PostsSkeleton />}>
+          <Suspense fallback={<PostsSkeleton title="Recent Posts" />}>
             <Posts params={{ u: id, p: currentPage }} title="Recent Posts" />
           </Suspense>
         </div>
