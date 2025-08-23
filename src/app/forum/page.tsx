@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import Posts from "@/components/content/Posts";
 import PostsSkeleton from "@/components/content/PostsSkeleton";
 import { auth } from "@/auth";
+import Form from "next/form";
 import { Input } from "@/components/ui/input";
 
 export default async function ForumPage({
@@ -45,7 +46,7 @@ export default async function ForumPage({
             </Link>
           </div>
         )}
-        <form className="flex flex-col gap-4" action="/forum">
+        <Form className="flex flex-col gap-4" action="/forum">
           <p className="border-cmono-50 text-cmono-50 w-full border-y px-2">
             Filter Posts
           </p>
@@ -70,7 +71,7 @@ export default async function ForumPage({
               Apply Filter
             </Button>
           </div>
-        </form>
+        </Form>
       </div>
     </div>
   );
