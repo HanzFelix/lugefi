@@ -22,7 +22,7 @@ export default async function ForumPage({
   return (
     <div className="container mx-auto flex flex-col-reverse gap-4 px-4 md:flex-row">
       <div className="flex-1">
-        <Suspense fallback={<PostsSkeleton />}>
+        <Suspense key={`${query}-${currentPage}`} fallback={<PostsSkeleton />}>
           <Posts params={{ q: query, p: currentPage }} />
         </Suspense>
       </div>
