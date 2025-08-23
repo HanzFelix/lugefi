@@ -41,6 +41,6 @@ export default function PostsClient({
       )}
     />
   ) : (
-    <p className="text-cmono-50 text-sm">No posts found.</p>
+    <p className="text-cmono-50 px-2 text-sm">No posts found.</p>
   );
 }
