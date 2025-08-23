@@ -41,7 +41,7 @@ export default async function RootLayout({
     <SessionProvider>
       <html lang="en" className="relative h-full">
         <body
-          className={`${aldrich.variable} ${chivo.variable} relative h-full min-h-full overflow-y-scroll pt-16 antialiased **:transition-colors **:duration-200 *:not-[nav]:pb-32`}
+          className={`${aldrich.variable} ${chivo.variable} relative h-full min-h-full overflow-y-scroll pt-16 antialiased **:transition-colors **:duration-200 [&>div:last-of-type]:pb-32`}
         >
           {children}
           <Navbar profile={retrievedProfile} />
