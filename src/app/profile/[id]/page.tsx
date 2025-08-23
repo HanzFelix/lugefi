@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { Suspense } from "react";
 import { getProfile } from "@/app/actions/profile";
+import Link from "next/link";
 
 export default async function Profile({
   params,
@@ -30,7 +31,13 @@ export default async function Profile({
               <p className="mb-4 text-sm">
                 Status: <span className="text-cblue">Available</span>
               </p>
-              <Button>Contact</Button>
+              {p.is_profile_of_user ? (
+                <Link href={`/profile/${id}/edit`}>
+                  <Button>Edit Profile</Button>
+                </Link>
+              ) : (
+                <Button disabled>Contact</Button>
+              )}
             </div>
             <div className="basis-24">
               <Image

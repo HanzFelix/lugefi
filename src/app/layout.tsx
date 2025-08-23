@@ -3,10 +3,7 @@ import { Aldrich, Chivo } from "next/font/google";
 import "./globals.css";
 import { SessionProvider } from "next-auth/react";
 import Navbar from "@/components/Navbar";
-import { profile, SelectProfile } from "@/db/schema/profile";
-import { db } from "@/db/database";
-import { eq } from "drizzle-orm";
-import { auth } from "@/auth";
+import { getSessionProfile } from "./actions/profile";
 
 const aldrich = Aldrich({
   variable: "--font-aldrich",
@@ -29,14 +26,8 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  let retrievedProfile: SelectProfile | undefined = undefined;
-  const session = await auth();
-  if (session?.user?.id) {
-    [retrievedProfile] = await db
-      .select()
-      .from(profile)
-      .where(eq(profile.user_id, session.user.id));
-  }
+  const sessionProfile = await getSessionProfile();
+
   return (
     <SessionProvider>
       <html lang="en" className="relative h-full">
@@ -44,7 +35,7 @@ export default async function RootLayout({
           className={`${aldrich.variable} ${chivo.variable} relative h-full min-h-full overflow-y-scroll pt-16 antialiased **:transition-colors **:duration-200 [&>div:last-of-type]:pb-32`}
         >
           {children}
-          <Navbar profile={retrievedProfile} />
+          <Navbar profile={sessionProfile} />
         </body>
       </html>
     </SessionProvider>
