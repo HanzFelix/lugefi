@@ -16,7 +16,7 @@ export default async function ForumPage({
   }>;
 }) {
   const params = await searchParams;
-  const query = (params?.q as string) || "";
+  const query = params?.q as string;
   const currentPage = Number(params?.p) || 1;
   const session = await auth();
   return (
