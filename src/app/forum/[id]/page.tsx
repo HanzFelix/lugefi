@@ -159,16 +159,18 @@ export async function generateMetadata({
   const { id } = await params;
   const [p] = await getPost(id);
 
-  return {
-    title: p.title,
-    image: p.image_url,
-    description: p.description,
-    openGraph: {
-      title: p.title,
-      description: p.description,
-      images: [{ url: p.image_url }],
-      publishedTime: p.created_at,
-      authors: [p.posted_by_name],
-    },
-  };
+  return p
+    ? {
+        title: p.title,
+        image: p.image_url,
+        description: p.description,
+        openGraph: {
+          title: p.title,
+          description: p.description,
+          images: [{ url: p.image_url }],
+          publishedTime: p.created_at,
+          authors: [p.posted_by_name],
+        },
+      }
+    : {};
 }
