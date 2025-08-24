@@ -89,3 +89,25 @@ export default async function Profile({
     </>
   );
 }
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: number }>;
+}) {
+  const { id } = await params;
+  const [p] = await getProfile(id);
+
+  return p
+    ? {
+        title: `${p.username} (Profile)`,
+        image: p.image_url,
+        description: `This user has not updated their bio yet.`,
+        openGraph: {
+          title: `${p.username} (Profile)`,
+          description: `This user has not updated their bio yet.`,
+          images: [{ url: p.image_url }],
+        },
+      }
+    : {};
+}
