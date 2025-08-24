@@ -17,8 +17,15 @@ const chivo = Chivo({
 });
 
 export const metadata: Metadata = {
-  title: "Lugefi",
+  title: { template: "%s | Lugefi", default: "Lugefi" },
   description: "What works, works",
+  metadataBase: new URL("https://lugefi.vercel.app/"),
+  openGraph: {
+    url: "https://lugefi.vercel.app/",
+    siteName: "Lugefi",
+    locale: "en_US",
+    type: "website",
+  },
 };
 
 export default async function RootLayout({
