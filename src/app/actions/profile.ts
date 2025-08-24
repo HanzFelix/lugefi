@@ -4,6 +4,7 @@ import { db } from "@/db/database";
 import { profile } from "@/db/schema/profile";
 import { user } from "@/db/schema/session";
 import { eq, sql } from "drizzle-orm";
+import { cache } from "react";
 
 export async function getSessionProfile() {
   const session = await auth();
@@ -15,7 +16,11 @@ export async function getSessionProfile() {
   )[0];
 }
 
-export async function getProfile(id: number) {
+export const getProfile = cache(async (id: number) => {
+  return await fetchProfile(id);
+});
+
+async function fetchProfile(id: number) {
   const session = await auth();
 
   return await db

@@ -5,8 +5,13 @@ import { comment, post } from "@/db/schema/forum";
 import { profile } from "@/db/schema/profile";
 import { user } from "@/db/schema/session";
 import { and, count, desc, eq, ilike, or, sql } from "drizzle-orm";
+import { cache } from "react";
 
-export async function getPost(id: number) {
+export const getPost = cache(async (id: number) => {
+  return await fetchPost(id);
+});
+
+async function fetchPost(id: number) {
   const session = await auth();
 
   return await db
