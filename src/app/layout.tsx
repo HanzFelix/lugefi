@@ -21,6 +21,14 @@ export const metadata: Metadata = {
   description: "What works, works",
   metadataBase: new URL("https://lugefi.vercel.app/"),
   openGraph: {
+    images: [
+      {
+        url: "https://res.cloudinary.com/dkftqtdk7/image/upload/v1764303213/meta-img_fyafo0.png",
+        width: 1200,
+        height: 630,
+        alt: "Banner Image of Lugefi",
+      },
+    ],
     url: "https://lugefi.vercel.app/",
     siteName: "Lugefi",
     locale: "en_US",
